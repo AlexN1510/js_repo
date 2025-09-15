@@ -12,13 +12,13 @@ test('Успешный логин и проверка страницы това�
   await loginPage.open();
   await loginPage.login('standard_user', 'secret_sauce');
 
-  const inventoryPage = new InventoryPage(page);
+  const inventoryPage = new InventoryPage(page); // Вся логика по инициализации пэйджей обычно происходит в начале теста, тут и далее нужно их вынести в начало теста  
   const pageTitle = await inventoryPage.getPageTitle();
   expect(pageTitle).toBe('Products');
 
   await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html')
 
-  const itemName = await inventoryPage.addItemToCart();
+  const itemName = await inventoryPage.addItemToCart(); // нужно правильно назвать метол. Например addMostExpensiveItemToCart(), а то я потерялся что делает этот метод))
   await inventoryPage.openCart();
 
   const cartPage = new CartPage(page);
@@ -27,7 +27,7 @@ test('Успешный логин и проверка страницы това�
   await cartPage.goToCheckout();
 
   const checkoutStepOnePage = new CheckoutStepOnePage(page);
-  await checkoutStepOnePage.fillUserInfo();
+  await checkoutStepOnePage.fillUserInfo(); // Этот метод лучше делать не захаркоженным, а принимающим два параметра в самом тесте.
 
   const checkoutStepTwoPage = new CheckoutStepTwoPage(page);
   await checkoutStepTwoPage.finishCheckout();
